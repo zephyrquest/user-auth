@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace user_auth.Models
+namespace UserAuth.Models
 {
     public class Movie
     {

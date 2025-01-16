@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using user_auth.Models;
+using UserAuth.Models;
 
-namespace user_auth.Controllers
+namespace UserAuth.Controllers
 {
     public class HomeController : Controller
     {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace user_auth.Migrations
+namespace UserAuth.Migrations
 {
     /// <inheritdoc />
     public partial class Rating : Migration

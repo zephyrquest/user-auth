@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using user_auth.Models;
+using UserAuth.Models;
 
-namespace user_auth.ViewModels
+namespace UserAuth.ViewModels
 {
     public class MovieGenre
     {

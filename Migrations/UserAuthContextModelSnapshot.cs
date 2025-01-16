@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using user_auth.Data;
+using UserAuth.Data;
 
 #nullable disable
 
-namespace user_auth.Migrations
+namespace UserAuth.Migrations
 {
     [DbContext(typeof(UserAuthContext))]
     partial class UserAuthContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace user_auth.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("user_auth.Models.Movie", b =>
+            modelBuilder.Entity("UserAuth.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

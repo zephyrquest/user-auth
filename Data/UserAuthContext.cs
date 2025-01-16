@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using user_auth.Models;
+using UserAuth.Models;
 
-namespace user_auth.Data
+namespace UserAuth.Data
 {
     public class UserAuthContext : DbContext
     {
@@ -14,6 +14,6 @@ namespace user_auth.Data
         {
         }
 
-        public DbSet<user_auth.Models.Movie> Movie { get; set; } = default!;
+        public DbSet<UserAuth.Models.Movie> Movie { get; set; } = default!;
     }
 }

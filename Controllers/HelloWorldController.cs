@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace user_auth.Controllers
+namespace UserAuth.Controllers
 {
     public class HelloWorldController : Controller
     {

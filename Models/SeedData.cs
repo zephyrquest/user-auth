@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using user_auth.Data;
+using UserAuth.Data;
 
-namespace user_auth.Models
+namespace UserAuth.Models
 {
     public static class SeedData
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using user_auth.Data;
-using user_auth.Models;
-namespace user_auth
+using UserAuth.Data;
+using UserAuth.Models;
+namespace UserAuth
 {
     public class Program
     {

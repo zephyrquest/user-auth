@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using user_auth.Data;
-using user_auth.Models;
-using user_auth.ViewModels;
+using UserAuth.Data;
+using UserAuth.Models;
+using UserAuth.ViewModels;
 
-namespace user_auth.Controllers
+namespace UserAuth.Controllers
 {
     public class MoviesController : Controller
     {
