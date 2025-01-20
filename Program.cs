@@ -16,7 +16,7 @@ namespace UserAuth
                     ?? throw new InvalidOperationException("Connection string 'UserAuthContext' not found."));
             });
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<UserAuthContext>();
 
             // Add services to the container.
@@ -48,8 +48,8 @@ namespace UserAuth
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             // Map Razor Pages for Identity
             app.MapRazorPages();

@@ -1,14 +1,22 @@
-﻿@model UserAuth.ViewModels.MovieGenre
+﻿@using Microsoft.AspNetCore.Identity
+
+@model UserAuth.ViewModels.MovieGenre
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 @{
     ViewData["Title"] = "Index";
+    var isAuthenticated = SignInManager.IsSignedIn(User);
+    var userId = UserManager.GetUserId(User);
 }
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if(isAuthenticated) {
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 
 <form asp-controller="Movies" asp-action="Index" method="get">
     <p>
@@ -61,9 +69,11 @@
                 @Html.DisplayFor(modelItem => item.Rating)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                @if(isAuthenticated && item.UserId == userId) {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                }
             </td>
         </tr>
 }

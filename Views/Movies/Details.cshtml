@@ -1,7 +1,13 @@
-﻿@model UserAuth.Models.Movie
+﻿@using Microsoft.AspNetCore.Identity
+
+@model UserAuth.Models.Movie
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 @{
     ViewData["Title"] = "Details";
+    var isAuthenticated = SignInManager.IsSignedIn(User);
+    var userId = UserManager.GetUserId(User);
 }
 
 <h1>Details</h1>
@@ -43,6 +49,8 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    @if(isAuthenticated && Model.UserId == userId) {
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    }
     <a asp-action="Index">Back to List</a>
 </div>

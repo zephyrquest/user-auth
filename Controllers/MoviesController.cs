@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +16,14 @@ namespace UserAuth.Controllers
     public class MoviesController : Controller
     {
         private readonly UserAuthContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public MoviesController(UserAuthContext context)
+        public MoviesController(UserAuthContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: Movies
@@ -76,6 +82,7 @@ namespace UserAuth.Controllers
         }
 
         // GET: Movies/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -86,10 +93,17 @@ namespace UserAuth.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
         {
+            if (!User.Identity!.IsAuthenticated)
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
+                movie.UserId = _userManager.GetUserId(User);
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -98,6 +112,7 @@ namespace UserAuth.Controllers
         }
 
         // GET: Movies/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -110,6 +125,13 @@ namespace UserAuth.Controllers
             {
                 return NotFound();
             }
+
+            var userId = _userManager.GetUserId(User);
+            if (movie.UserId != userId)
+            {
+                return Forbid();
+            }
+
             return View(movie);
         }
 
@@ -118,6 +140,7 @@ namespace UserAuth.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
         {
             if (id != movie.Id)
@@ -125,11 +148,29 @@ namespace UserAuth.Controllers
                 return NotFound();
             }
 
+            var existingMovie = await _context.Movie.FindAsync(id);
+            if (existingMovie == null)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (existingMovie.UserId != userId)
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(movie);
+                    existingMovie.Title = movie.Title;
+                    existingMovie.ReleaseDate = movie.ReleaseDate;
+                    existingMovie.Genre = movie.Genre;
+                    existingMovie.Price = movie.Price;
+                    existingMovie.Rating = movie.Rating;
+
+                    _context.Update(existingMovie);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -149,6 +190,7 @@ namespace UserAuth.Controllers
         }
 
         // GET: Movies/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -163,17 +205,30 @@ namespace UserAuth.Controllers
                 return NotFound();
             }
 
+            var userId = _userManager.GetUserId(User);
+            if (movie.UserId != userId)
+            {
+                return Forbid();
+            }
+
             return View(movie);
         }
 
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var movie = await _context.Movie.FindAsync(id);
             if (movie != null)
             {
+                var userId = _userManager.GetUserId(User);
+                if (movie.UserId != userId)
+                {
+                    return Forbid();
+                }
+
                 _context.Movie.Remove(movie);
             }
 
