@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using UserAuth.Data;
 using UserAuth.Models;
@@ -15,8 +16,14 @@ namespace UserAuth
                     ?? throw new InvalidOperationException("Connection string 'UserAuthContext' not found."));
             });
 
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<UserAuthContext>();
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Add Razor Pages support
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
@@ -42,6 +49,10 @@ namespace UserAuth
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
+
+            // Map Razor Pages for Identity
+            app.MapRazorPages();
 
             /* When I browse to the app and don't supply any URL segments, 
              * it defaults to the "Home" controller and the "Index" method specified in the template line highlighted below */

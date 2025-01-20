@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UserAuth.Data;
 
@@ -11,9 +12,11 @@ using UserAuth.Data;
 namespace UserAuth.Migrations
 {
     [DbContext(typeof(UserAuthContext))]
-    partial class UserAuthContextModelSnapshot : ModelSnapshot
+    [Migration("20250119212452_Auth")]
+    partial class Auth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
