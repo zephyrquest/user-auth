@@ -8,6 +8,7 @@
     ViewData["Title"] = "Details";
     var isAuthenticated = SignInManager.IsSignedIn(User);
     var userId = UserManager.GetUserId(User);
+    var isAdmin = User.IsInRole("Admin");
 }
 
 <h1>Details</h1>
@@ -49,7 +50,7 @@
     </dl>
 </div>
 <div>
-    @if(isAuthenticated && Model.UserId == userId) {
+    @if(isAuthenticated && Model.UserId == userId || isAdmin) {
         <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
     }
     <a asp-action="Index">Back to List</a>

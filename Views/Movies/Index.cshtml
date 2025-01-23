@@ -8,6 +8,7 @@
     ViewData["Title"] = "Index";
     var isAuthenticated = SignInManager.IsSignedIn(User);
     var userId = UserManager.GetUserId(User);
+    var isAdmin = User.IsInRole("Admin");
 }
 
 <h1>Index</h1>
@@ -70,10 +71,19 @@
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                @if(isAuthenticated && item.UserId == userId) {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @if (isAuthenticated)
+                {    
+                    @if (isAdmin || item.UserId == userId)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    }
+
+                    @if (isAdmin)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
                 }
+                
             </td>
         </tr>
 }

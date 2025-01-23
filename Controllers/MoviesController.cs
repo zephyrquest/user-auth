@@ -127,7 +127,7 @@ namespace UserAuth.Controllers
             }
 
             var userId = _userManager.GetUserId(User);
-            if (movie.UserId != userId)
+            if (movie.UserId != userId && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -155,7 +155,7 @@ namespace UserAuth.Controllers
             }
 
             var userId = _userManager.GetUserId(User);
-            if (existingMovie.UserId != userId)
+            if (existingMovie.UserId != userId && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -190,7 +190,7 @@ namespace UserAuth.Controllers
         }
 
         // GET: Movies/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -205,30 +205,18 @@ namespace UserAuth.Controllers
                 return NotFound();
             }
 
-            var userId = _userManager.GetUserId(User);
-            if (movie.UserId != userId)
-            {
-                return Forbid();
-            }
-
             return View(movie);
         }
 
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var movie = await _context.Movie.FindAsync(id);
             if (movie != null)
             {
-                var userId = _userManager.GetUserId(User);
-                if (movie.UserId != userId)
-                {
-                    return Forbid();
-                }
-
                 _context.Movie.Remove(movie);
             }
 

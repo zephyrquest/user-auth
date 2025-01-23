@@ -7,7 +7,7 @@ namespace UserAuth
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<UserAuthContext>(options =>
@@ -16,7 +16,9 @@ namespace UserAuth
                     ?? throw new InvalidOperationException("Connection string 'UserAuthContext' not found."));
             });
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddDefaultTokenProviders()
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<UserAuthContext>();
 
             // Add services to the container.
@@ -26,14 +28,6 @@ namespace UserAuth
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
-
-            // initialize database
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-
-                SeedData.Initialize(services);
-            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -65,6 +59,14 @@ namespace UserAuth
                 name: "welcomeRoute",
                 pattern: "HelloWorld/Welcome/{name}/{id?}",
                 defaults: new { controller = "HelloWorld", action = "Welcome" });
+
+            // initialize database
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                await SeedData.Initialize(services);
+            }
 
             app.Run();
         }
