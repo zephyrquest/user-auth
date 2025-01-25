@@ -16,11 +16,11 @@
             context: .
             dockerfile: Dockerfile
         ports:
-            - "8081:8081"
+            - "8080:8080"
         depends_on:
             - mssqlserver-container
         environment:
-            ConnectionStrings__DefaultConnection: "Server=mssqlserver-container,1433;Database=UserAuthDB;User ID=sa;Password=c#connection24;TrustServerCertificate=True;Trusted_Connection=False;MultipleActiveResultSets=True;"
+            ConnectionStrings__UserAuthContext: "Server=mssqlserver-container,1433;Database=UserAuthDB;User ID=sa;Password=c#connection24;TrustServerCertificate=True;Trusted_Connection=False;MultipleActiveResultSets=True;"
         restart: always
 
 volumes:

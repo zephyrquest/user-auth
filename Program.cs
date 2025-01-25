@@ -37,6 +37,12 @@ namespace UserAuth
                 app.UseHsts();
             }
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<UserAuthContext>();
+                context.Database.Migrate(); // Applies any pending migrations or creates the database if it doesn't exist
+            }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
